@@ -56,26 +56,26 @@
               lispy-telnet-sequences)
       (let ((strlist (split-string str "[\n]"))
             (inhibit-read-only t))
+        (save-excursion
         (mapcar (lambda (s)
                   (let ((st (concat s "\n")))
                     (run-hook-with-args 'lispy-pre-insert-hook st)
                     (cond
                      ((eq lispy-insert-line t)
-                      (goto-char (point-max))
-                      (insert st))
+                      (condition-case nil
+                          (progn
+                            (goto-char (process-mark proc))
+                            (insert-before-markers st))
+                        (error (insert st)))
+                      (set-marker (process-mark proc) (point)))
                      ((eq lispy-insert-line 'next)
                       (setq lispy-insert-line t)))
                     (run-hook-with-args 'lispy-post-insert-hook st)))
-                strlist)))
+                strlist))))
     (if lispy-read-password
         (process-send-string lispy-process (concat (read-passwd "") "\n")))
+    (goto-char (process-mark proc))
     ))
-
-;; (defun lispy-filter (proc string)
-;;   (with-current-buffer lispy-buffer
-;;     (let ((inhibit-read-only t))
-;;       (goto-char (point-max))
-;;       (insert string))))
 
 (defun lispy-sentinel (process event)
   (message
@@ -132,16 +132,18 @@ If `lispy-mode-hook' is set, run it."
                                                   (insert (this-command-keys))) lispy-mode-map global-map)
 
 (define-key lispy-mode-map "\C-xk" (lambda () (interactive)
-                                     (if (and (not (null lispy-process)) (eq (process-status lispy-process) 'open))
+                                     (if (and (not (null lispy-process)) (eq (process-status lispy-process) 'open) (eq lispy-connected t))
                                          (lispy-quit))
                                      (run-hooks 'lispy-exit-hook)))
 
 
 (add-hook 'lispy-connected-hook (lambda ()
-                                  (setq lispy-require-end-of-line t)
+                                  (setq lispy-connected t
+                                        lispy-require-end-of-line t)
                                   (lispy-message (format "set client %s\n" lispy-version))))
 (add-hook 'lispy-disconnected-hook (lambda ()
-                                  (setq lispy-require-end-of-line nil)))
+                                     (setq lispy-connected nil
+                                           lispy-require-end-of-line nil)))
 (add-hook 'lispy-exit-hook (lambda ()
                              (kill-buffer lispy-buffer)))
 

@@ -50,6 +50,7 @@
 (defvar lispy-insert-line t "")
 (defvar lispy-require-end-of-line nil "")
 (defvar lispy-insert-buffer nil "")
+(defvar lispy-connected nil "")
 
 (defvar lispy-mode-map '())
 (defvar lispy-send-mode-map '())
