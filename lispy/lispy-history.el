@@ -26,6 +26,8 @@
 
 ;;; Code:
 
+(require 'lispy-vars)
+
 (defvar lispy-history-commands nil "*History ring for lispy input arguments.")
 (defvar lispy-history-max-size 100 "")
 (defvar lispy-history-cursor -1 "")

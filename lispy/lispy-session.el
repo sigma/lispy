@@ -26,11 +26,12 @@
 
 ;;; Code:
 
-(defvar lispy-session-alist '(("zen" "zen.dtdns.net" 4000)
-                              ("home" "sigmamtp.dyndns.org" 5000 "Sigma" nil)
-                              ("local" "localhost" 5000)) "")
+(require 'lispy-vars)
+(require 'lispy-utils)
 
-(defvar lispy-session-current-session nil)
+(defvar lispy-session-alist '(("zen" "zen.dtdns.net" 4000)) "Sessions name to be used when launching `lispy'." )
+
+(lispy-defvar lispy-session-current-session nil)
 
 (defadvice lispy (around around-lispy-session activate)
   (interactive (let ((elem (assoc
@@ -39,15 +40,28 @@
                                                (mapcar (lambda (e) (list (car e) (incf i)))
                                                        lispy-session-alist)))
                             lispy-session-alist)))
-                 (setq lispy-session-current-session elem)
+                 (lispy-add-hook-once 'lispy-mode-hook `(lambda () 
+                                                          (setq lispy-session-current-session ',elem)))
                  (list (nth 1 elem) (nth 2 elem))))
   ad-do-it
   (when (nth 3 lispy-session-current-session)
     (lispy-message (nth 3 lispy-session-current-session))))
 
-(defadvice lispy-read-password (around around-lisp-read-password activate)
+(defadvice lispy-read-password (around around-lispy-read-password activate)
   (let ((lispy-password (nth 4 lispy-session-current-session)))
-      ad-do-it))
+    ad-do-it))
+
+(defun lispy-session (s)
+  (let ((elem (if (stringp s)
+                  (assoc s lispy-session-alist)
+                s)))
+    (lispy-add-hook-once 'lispy-mode-hook `(lambda () 
+                                             (setq lispy-session-current-session ',elem)))
+    (lispy (nth 1 elem) (nth 2 elem))))
+
+;; (defadvice lispy-reconnect (after after-lispy-reconnect activate)
+;;   (when (nth 3 lispy-session-current-session)
+;;     (lispy-message (nth 3 lispy-session-current-session))))
 
 (provide 'lispy-session)
 ;;; lispy-session.el ends here

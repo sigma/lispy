@@ -50,6 +50,7 @@
   (let ((base-buffer (current-buffer)))
     (save-window-excursion
       (with-output-to-temp-buffer buffername
+        (lispy-inherit-buffer-local-variables base-buffer (get-buffer buffername))
         (save-excursion
           (goto-char (point-min))
           (while (and (not (eobp))

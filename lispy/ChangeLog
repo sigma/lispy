@@ -1,3 +1,40 @@
+2004-07-30  Yann Hodique  <Yann.Hodique@lifl.fr>
+
+	* lispy.el 
+	(lispy-sentinel): add the possibility to inhibit it
+	(lispy-reconnect): new function
+	(lispy): make lispy-not-yet-connected local hook
+
+	* lispy-vars.el 
+	(lispy-buffer-local-variables): new variable
+	(lispy-buffer-local-hierarchy): new variable
+	(lispy-defvar): new macro
+	(lispy-inherit-buffer-local-variables): new function
+	(lispy-clean-buffer-hierarchy): new function
+	(lispy-update-buffer-hierarchy): new function
+	use lispy-defvar when needed
+
+	* lispy-utils.el 
+	(lispy-quit): inhibit sentinel
+	(lispy-add-hook-once): new function
+
+	* lispy-session.el 
+	(lispy-vars): missing require
+	(lispy-session-alist): remove local-specific entries
+	(lispy-session-current-session): new variable
+	(lispy): delay session set
+	(lispy-read-password): fix advice name
+	(lispy-session): new function
+
+	* lispy-send.el 
+	(lispy-init-send-buffer): inherit local variables from base buffer
+
+	* lispy-occur.el 
+	(lispy-occur): inherit local variables from base buffer
+
+	* lispy-history.el 
+	(lispy-vars): missing require
+
 2004-06-30  Yann Hodique  <Yann.Hodique@lifl.fr>
 
 	* lispy.el

@@ -79,13 +79,23 @@
                   strlist)))
       (when move (goto-char (process-mark proc))))
     (if lispy-echo-off
-        (process-send-string lispy-process (concat (lispy-read-password) "\r\n")))))
+        (let ((msg (lispy-read-password)))
+          (process-send-string lispy-process (concat msg "\r\n"))))))
 
 (defun lispy-sentinel (process event)
   "Function to call when the processus PROCESS receives EVENT. Used to signal disconnection."
-  (message
-   (format "Process: %s had the event `%s'" process event)
-   (run-hooks 'lispy-disconnected-hook)))
+  (if lispy-inhibit-sentinel
+      (setq lispy-inhibit-sentinel t)
+    (message
+     (format "Process: %s had the event `%s'" process event)
+     (run-hooks 'lispy-disconnected-hook))))
+
+(defun lispy-reconnect ()
+  (interactive)
+  (lispy-quit)
+  (run-hooks 'lispy-disconnected-hook)
+  (lispy-session lispy-session-current-session)
+  (lispy-update-buffer-hierarchy (current-buffer) 'lispy-process))
 
 ;;;###autoload
 (defun lispy (host port &optional buffer)
@@ -98,7 +108,7 @@
     (setq buffer (get-buffer-create buffer-name))
     (switch-to-buffer buffer-name)
     (setq buffer-read-only t)
-    (add-hook 'lispy-pre-insert-hook 'lispy-not-yet-connected)
+    (add-hook 'lispy-pre-insert-hook 'lispy-not-yet-connected nil t)
     (setq lispy-host host lispy-port port lispy-remote-user nil lispy-buffer buffer)
 
     (set-process-filter
@@ -110,13 +120,6 @@
 (defun lispy-mode (&optional sub)
   "Set major-mode for mtp sessions. If `lispy-mode-hook' is set, run it."
   (interactive)
-  (mapcar 'make-local-variable '(
-                                        ;lispy-host lispy-port lispy-remote-user lispy-buffer
-                                        ;lispy-read-password lispy-read-user-list
-                                        ;lispy-user-list
-                                 lispy-insert-line
-                                 lispy-require-end-of-line lispy-insert-buffer
-                                 lispy-send-prefix))
   (setq major-mode 'lispy-mode)
   (setq mode-name "mtp")
   (use-local-map
@@ -143,6 +146,8 @@
                                          (lispy-quit))
                                      (run-hooks 'lispy-exit-hook)))
 
+(define-key lispy-mode-map "\C-cR" 'lispy-reconnect)
+
 (add-hook 'lispy-connected-hook (lambda ()
                                   (setq lispy-connected t
                                         lispy-require-end-of-line t)
@@ -151,7 +156,9 @@
 
 (add-hook 'lispy-disconnected-hook (lambda ()
                                      (setq lispy-connected nil
-                                           lispy-require-end-of-line nil)))
+                                           lispy-require-end-of-line nil
+                                           lispy-echo-off nil)
+                                     (lispy-reconnect)))
 (add-hook 'lispy-exit-hook (lambda ()
                              (kill-buffer lispy-buffer)))
 

@@ -109,6 +109,7 @@
 (defun lispy-quit ()
   "Close connection softly by sending appropriate message to server."
   (interactive)
+  (setq lispy-inhibit-sentinel t)
   (lispy-message "quit"))
 
 (defconst lispy-emacs-version
@@ -122,6 +123,11 @@
   (if (>= lispy-emacs-version 210350)
       (split-string str sep t)
     (split-string str sep)))
+
+(defun lispy-add-hook-once (hook function &optional append local)
+  (let ((code (list 'lambda)))
+    (setcdr code `(() (,function) (remove-hook ',hook ',code ',local)))
+    (add-hook hook code append local)))
 
 (provide 'lispy-utils)
 ;;; lispy-utils.el ends here

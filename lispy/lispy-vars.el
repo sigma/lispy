@@ -26,6 +26,52 @@
 
 ;;; Code:
 
+(defvar lispy-buffer-local-variables nil)
+(defvar lispy-buffer-local-hierarchy nil)
+
+(defmacro lispy-defvar (symbol &optional initvalue docstring)
+  (declare (indent 2))
+  `(progn 
+     (defvar ,symbol ,initvalue ,docstring)
+     (make-variable-buffer-local ',symbol)
+     (add-to-list 'lispy-buffer-local-variables ',symbol)))
+
+(defun lispy-inherit-buffer-local-variables (from &optional to)
+  (let* ((orig from)
+         (target (or to (current-buffer)))
+         (values (mapcar (lambda (s) (cons s (symbol-value-in-buffer s orig))) lispy-buffer-local-variables))
+         (node (assoc orig lispy-buffer-local-hierarchy)))
+    (if node
+        (unless (member target (cdr node))
+          (setcdr node (append (cdr node) (list target))))
+      (add-to-list 'lispy-buffer-local-hierarchy (cons orig (list target))))
+    (save-excursion
+      (set-buffer target)
+      (mapc (lambda (v) (set (car v) (cdr v))) values))))
+
+(defun lispy-clean-buffer-hierarchy (buffer)
+  (setq lispy-buffer-local-hierarchy 
+        (remove nil
+                (mapcar (lambda (l)
+                          (if (equal (car l) buffer) nil
+                            (remove buffer l)))
+                        lispy-buffer-local-hierarchy))))
+
+(defun lispy-update-buffer-hierarchy (buffer &rest variables)
+  (mapc (lambda (variable) 
+          (let ((value (symbol-value-in-buffer variable buffer))
+                (node (assoc buffer lispy-buffer-local-hierarchy)))
+            (when node
+              (mapc (lambda (b)
+                      (if (buffer-live-p b)
+                          (save-excursion
+                            (set-buffer b)
+                            (set variable value)
+                            (lispy-update-buffer-hierarchy b variable))
+                        (lispy-clean-buffer-hierarchy b)))
+                    (cdr node)))))
+        variables))
+
 (defvar lispy-version "Lispy 0.4"
   "*Version of the program")
 
@@ -41,28 +87,33 @@
 (defvar lispy-default-host "localhost")
 (defvar lispy-default-port "5000")
 
-(defvar lispy-host nil)
-(defvar lispy-port nil)
-(defvar lispy-remote-user nil "")
-(defvar lispy-password nil "")
-(defvar lispy-echo-off nil "")
-(defvar lispy-read-user-list nil "")
-(defvar lispy-user-list nil "")
-(defvar lispy-insert-line t "")
-(defvar lispy-require-end-of-line nil "")
-(defvar lispy-insert-buffer nil "")
-(defvar lispy-connected nil "")
+(lispy-defvar lispy-host nil)
+(lispy-defvar lispy-port nil)
+(lispy-defvar lispy-remote-user nil "")
+(lispy-defvar lispy-password nil "")
+(lispy-defvar lispy-echo-off nil "")
+(lispy-defvar lispy-read-user-list nil "")
+(lispy-defvar lispy-user-list nil "")
+(lispy-defvar lispy-insert-line t "")
+(lispy-defvar lispy-require-end-of-line nil "")
+(lispy-defvar lispy-insert-buffer nil "")
+(lispy-defvar lispy-connected nil "")
+
+(lispy-defvar lispy-inhibit-sentinel nil "")
 
 (defvar lispy-mode-map '())
 (defvar lispy-send-mode-map '())
 
-(defvar lispy-process nil)
+(lispy-defvar lispy-process nil)
+
 (defvar lispy-buffer nil)
 (defvar lispy-buffer-name "*<Mtp> Chat*")
+
 (defvar lispy-send-buffer nil)
 (defvar lispy-send-buffer-name "*<Mtp> Chat* -- send")
 (defvar lispy-send-buffer-height 5)
-(defvar lispy-send-prefix "")
+(lispy-defvar lispy-send-prefix "")
+
 (defvar lispy-telnet-sequences '(
                                  ("ÿû" . lispy-turn-off-echo)
                                  ("ÿü" . lispy-turn-on-echo)

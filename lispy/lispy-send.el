@@ -38,8 +38,11 @@
 
 (defun lispy-init-send-buffer ()
   (save-window-excursion
-    (setq lispy-send-buffer (switch-to-buffer lispy-send-buffer-name t))
-    (lispy-mode 'send)))
+    (let ((from (current-buffer))
+          (to (switch-to-buffer lispy-send-buffer-name t)))
+      (lispy-inherit-buffer-local-variables from to)
+      (setq lispy-send-buffer to)
+      (lispy-mode 'send))))
 
 (setq lispy-send-mode-map (make-keymap))
 (define-key lispy-send-mode-map "\C-m" 'lispy-send)
