@@ -74,9 +74,11 @@
 (defun lispy-send ()
   (interactive)
   (let ((s (buffer-string)))
-    (lispy-clear-text-area)
-    (lispy-message (concat lispy-send-prefix s))
-    ))
+    (if (not (equal s ""))
+        (progn
+          (lispy-clear-text-area)
+          (lispy-message (concat lispy-send-prefix s))
+          ))))
 
 (defun lispy-fetch-user-list (string)
   (if lispy-read-user-list

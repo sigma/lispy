@@ -30,8 +30,6 @@
 
 (defvar lispy-osd-patterns nil "")
 
-(osd-init)
-
 (defun lispy-osd-install-login-patterns ()
   (add-to-list 'lispy-osd-patterns lispy-remote-user)
   )
@@ -41,6 +39,8 @@
                                              (if (string-match pat str)
                                                  (osd-display str)))
                                            lispy-osd-patterns)))
+
+(add-hook 'lispy-mode-hook 'osd-init)
 
 (add-hook 'lispy-connected-hook 'lispy-osd-install-login-patterns)
 

@@ -26,12 +26,12 @@
 
 ;;; Code:
 
-(defvar lispy-version "Lispy 0.2"
+(defvar lispy-version "Lispy 0.3"
   "*Version of the program")
 
-(defvar lispy-mode-hook nil "*Hooks to run after setting current buffer to lispy-mode.")
-(defvar lispy-pre-insert-hook nil "")
-(defvar lispy-post-insert-hook nil "")
+(defvar lispy-mode-hook nil "*Hook to run after setting current buffer to lispy-mode.")
+(defvar lispy-pre-insert-hook nil "Hook to run before inserting a new line. Functions are called with the string as argument")
+(defvar lispy-post-insert-hook nil "Hook to run after inserting a new line. Functions are called with the string as argument")
 (defvar lispy-pre-send-hook nil "")
 (defvar lispy-post-send-hook nil "")
 (defvar lispy-connected-hook nil "")

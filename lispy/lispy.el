@@ -45,7 +45,7 @@
            (str (if lispy-require-end-of-line
                     (progn
                       (let ((pos (- (length string2) 1 (string-match "\n" (apply 'string (reverse (string-to-list string2)))))))
-                        (setq lispy-insert-buffer (substring string2 pos nil))
+                        (setq lispy-insert-buffer (substring string2 (+ pos 1) nil))
                         (substring string2 0 pos)))
                   string2)))
       (mapcar (lambda (seq)
@@ -61,17 +61,21 @@
                     (run-hook-with-args 'lispy-pre-insert-hook st)
                     (cond
                      ((eq lispy-insert-line t)
-                      (if (< (point) (point-max))
-                          (save-excursion
-                            (goto-char (point-max))
-                            (insert st))
-                        (insert st)))
+                      (goto-char (point-max))
+                      (insert st))
                      ((eq lispy-insert-line 'next)
                       (setq lispy-insert-line t)))
                     (run-hook-with-args 'lispy-post-insert-hook st)))
                 strlist)))
     (if lispy-read-password
-        (process-send-string lispy-process (concat (read-passwd "") "\n")))))
+        (process-send-string lispy-process (concat (read-passwd "") "\n")))
+    ))
+
+;; (defun lispy-filter (proc string)
+;;   (with-current-buffer lispy-buffer
+;;     (let ((inhibit-read-only t))
+;;       (goto-char (point-max))
+;;       (insert string))))
 
 (defun lispy-sentinel (process event)
   (message
