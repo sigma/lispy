@@ -79,7 +79,7 @@
                   strlist)))
       (when move (goto-char (process-mark proc))))
     (if lispy-read-password
-        (process-send-string lispy-process (concat (read-passwd "") "\n")))))
+        (process-send-string lispy-process (concat (read-passwd "") "\r\n")))))
 
 (defun lispy-sentinel (process event)
   "Function to call when the processus PROCESS receives EVENT. Used to signal disconnection."
@@ -137,7 +137,9 @@
                                                   (insert (this-command-keys))) lispy-mode-map global-map)
 
 (define-key lispy-mode-map "\C-xk" (lambda () (interactive)
-                                     (if (and (not (null lispy-process)) (eq (process-status lispy-process) 'open) (eq lispy-connected t))
+                                     (if (and (not (null lispy-process))
+                                              (eq (process-status lispy-process) 'open)
+                                              (eq lispy-connected t))
                                          (lispy-quit))
                                      (run-hooks 'lispy-exit-hook)))
 

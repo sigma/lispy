@@ -70,7 +70,7 @@
   (and s
        (progn
          (run-hook-with-args 'lispy-pre-send-hook s)
-         (process-send-string lispy-process (concat s "\n"))
+         (process-send-string lispy-process (concat s "\r\n"))
          (run-hook-with-args 'lispy-post-send-hook s)
          )))
 
