@@ -87,7 +87,12 @@
 
 (add-hook 'lispy-pre-insert-hook (lambda (&rest args)
                                    (setq lispy-reconnect-status nil)))
-(add-hook 'lispy-disconnected-hook 'lispy-reconnect)
+
+(add-hook 'lispy-disconnected-hook (lambda ()
+                                     (when (equal lispy-reconnect-status 'reconnect)
+                                       (setq lispy-reconnect-status 'ask))
+                                     (lispy-reconnect)))
+
 (add-hook 'lispy-connected-hook 'lispy-start-timer)
 
 (provide 'lispy-autoreconnect)
