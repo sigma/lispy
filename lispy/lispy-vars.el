@@ -72,7 +72,7 @@
                     (cdr node)))))
         variables))
 
-(defvar lispy-version "Lispy 0.4"
+(defvar lispy-version "Lispy 0.5"
   "*Version of the program")
 
 (defvar lispy-mode-hook nil "*Hook to run after setting current buffer to lispy-mode.")
