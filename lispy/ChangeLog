@@ -1,3 +1,18 @@
+2004-08-04  Yann Hodique  <Yann.Hodique@lifl.fr>
+
+	* lispy-utils.el
+	(lispy-message): renamed hooks
+	(lispy-send): new hook
+
+	* lispy-send.el
+	(lispy-post-message-hook): renamed hook
+
+	* lispy-history.el
+	(lispy-post-message-hook): renamed hook
+
+	* lispy-h4x0r.el:
+	initial checkin
+
 2004-08-02  Yann Hodique  <Yann.Hodique@lifl.fr>
 
 	* lispy.el

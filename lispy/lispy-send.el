@@ -48,7 +48,7 @@
 (define-key lispy-send-mode-map "\C-m" 'lispy-send)
 (define-key lispy-send-mode-map [\M-return] 'newline)
 
-(add-hook 'lispy-post-send-hook (lambda (s)
+(add-hook 'lispy-post-message-hook (lambda (s)
                                   (if (eq (window-buffer) lispy-send-buffer)
                                       (delete-window))
                                   (goto-char (point-max))))

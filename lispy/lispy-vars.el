@@ -31,7 +31,7 @@
 
 (defmacro lispy-defvar (symbol &optional initvalue docstring)
   (declare (indent 2))
-  `(progn 
+  `(progn
      (defvar ,symbol ,initvalue ,docstring)
      (make-variable-buffer-local ',symbol)
      (add-to-list 'lispy-buffer-local-variables ',symbol)))
@@ -50,7 +50,7 @@
       (mapc (lambda (v) (set (car v) (cdr v))) values))))
 
 (defun lispy-clean-buffer-hierarchy (buffer)
-  (setq lispy-buffer-local-hierarchy 
+  (setq lispy-buffer-local-hierarchy
         (remove nil
                 (mapcar (lambda (l)
                           (if (equal (car l) buffer) nil
@@ -58,7 +58,7 @@
                         lispy-buffer-local-hierarchy))))
 
 (defun lispy-update-buffer-hierarchy (buffer &rest variables)
-  (mapc (lambda (variable) 
+  (mapc (lambda (variable)
           (let ((value (symbol-value-in-buffer variable buffer))
                 (node (assoc buffer lispy-buffer-local-hierarchy)))
             (when node
@@ -79,7 +79,8 @@
 (defvar lispy-pre-insert-hook nil "Hook to run before inserting a new line. Functions are called with the string as argument")
 (defvar lispy-post-insert-hook nil "Hook to run after inserting a new line. Functions are called with the string as argument")
 (defvar lispy-pre-send-hook nil "")
-(defvar lispy-post-send-hook nil "")
+(defvar lispy-pre-message-hook nil "")
+(defvar lispy-post-message-hook nil "")
 (defvar lispy-connected-hook nil "")
 (defvar lispy-disconnected-hook nil "")
 (defvar lispy-exit-hook nil "")

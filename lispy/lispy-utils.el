@@ -71,14 +71,14 @@
   (interactive)
   (and s
        (progn
-         (run-hook-with-args 'lispy-pre-send-hook s)
+         (run-hook-with-args 'lispy-pre-message-hook s)
          (condition-case nil
              (progn
                (process-send-string lispy-process (concat (replace-regexp-in-string
                                                            (string 255)
                                                            (string 255 255) s)
                                                           "\r\n"))
-               (run-hook-with-args 'lispy-post-send-hook s))
+               (run-hook-with-args 'lispy-post-message-hook s))
            (error (progn
 ;;                    (message "plop")
                     (lispy-sentinel lispy-process "disconnected"))))
@@ -95,6 +95,7 @@
     (if (not (equal s ""))
         (progn
           (lispy-clear-text-area)
+          (run-hooks 'lispy-pre-send-hook)
           (lispy-message (concat lispy-send-prefix s))
           ))))
 

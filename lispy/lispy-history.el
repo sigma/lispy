@@ -81,7 +81,7 @@
 (define-key lispy-send-mode-map "\M-p" 'lispy-history-back)
 (define-key lispy-send-mode-map "\M-n" 'lispy-history-forward)
 
-(add-hook 'lispy-post-send-hook 'lispy-history-add-entry)
+(add-hook 'lispy-post-message-hook 'lispy-history-add-entry)
 (add-hook 'lispy-connected-hook 'lispy-history-clear t)
 
 (provide 'lispy-history)
