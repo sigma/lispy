@@ -53,7 +53,6 @@
 
 (defvar lispy-mode-map '())
 (defvar lispy-send-mode-map '())
-(defvar lispy-occur-mode-map '())
 
 (defvar lispy-process nil)
 (defvar lispy-buffer nil)
@@ -67,20 +66,6 @@
                                  ("ÿü" . lispy-turn-on-echo)
                                  ("" . lispy-beep)
                                  ("[2J[0;0H" . lispy-clear-text-area)) "")
-
-(defface lispy-default-face '((t (:foreground "wheat"))) "")
-(defface lispy-aboutme-face '((t (:foreground "lightblue"))) "")
-(defface lispy-Mtp-face '((t (:foreground "yellow"))) "")
-(defface lispy-me-face '((t (:foreground "grey"))) "")
-(defface lispy-tell-face '((t (:foreground "red"))) "")
-(defface lispy-url-face '((t (:foreground "green"))) "")
-
-(defvar lispy-default-face 'lispy-default-face)
-(defvar lispy-aboutme-face 'lispy-aboutme-face)
-(defvar lispy-Mtp-face 'lispy-Mtp-face)
-(defvar lispy-me-face 'lispy-me-face)
-(defvar lispy-tell-face 'lispy-tell-face)
-(defvar lispy-url-face 'lispy-url-face)
 
 (provide 'lispy-vars)
 ;;; lispy-vars.el ends here

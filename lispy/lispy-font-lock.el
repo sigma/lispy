@@ -28,6 +28,20 @@
 
 (defvar lispy-keywords '())
 
+(defface lispy-default-face '((t (:foreground "wheat"))) "")
+(defface lispy-aboutme-face '((t (:foreground "lightblue"))) "")
+(defface lispy-Mtp-face '((t (:foreground "yellow"))) "")
+(defface lispy-me-face '((t (:foreground "grey"))) "")
+(defface lispy-tell-face '((t (:foreground "red"))) "")
+(defface lispy-url-face '((t (:foreground "green"))) "")
+
+(defvar lispy-default-face 'lispy-default-face)
+(defvar lispy-aboutme-face 'lispy-aboutme-face)
+(defvar lispy-Mtp-face 'lispy-Mtp-face)
+(defvar lispy-me-face 'lispy-me-face)
+(defvar lispy-tell-face 'lispy-tell-face)
+(defvar lispy-url-face 'lispy-url-face)
+
 (defun lispy-set-keywords ()
   (let ((user (lispy-case-unsensitive lispy-remote-user)))
     (setq lispy-keywords `(
@@ -52,6 +66,12 @@
       (lispy-font-lock)))
 
 (add-hook 'font-lock-mode-hook 'lispy-font-lock-hook)
+
+(add-hook 'lispy-connected-hook (lambda ()
+                                  (lispy-set-keywords)
+                                  (lispy-font-lock)
+                                  (turn-on-font-lock)))
+
 
 (provide 'lispy-font-lock)
 ;;; lispy-font-lock.el ends here

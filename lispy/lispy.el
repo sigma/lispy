@@ -35,8 +35,6 @@
   (cond
    ((string-match "^<Mtp> Welcome, \\(\\w+\\)*\\." string)
     (setq lispy-remote-user (match-string 1 string))
-    (lispy-set-keywords)
-    (lispy-font-lock)
     (run-hooks 'lispy-connected-hook)
     (remove-hook 'lispy-pre-insert-hook 'lispy-not-yet-connected))
    ))
@@ -129,30 +127,26 @@ If `lispy-mode-hook' is set, run it."
                                                   (lispy-reach-sending-buffer)
                                                   (insert (this-command-keys))) lispy-mode-map global-map)
 
-(require 'lispy-commands)
 (define-key lispy-mode-map "\C-xk" (lambda () (interactive)
                                      (if (and (not (null lispy-process)) (eq (process-status lispy-process) 'open))
                                          (lispy-quit))
                                      (run-hooks 'lispy-exit-hook)))
 
-;; history
-(require 'lispy-history)
-
-;; font lock
-(require 'lispy-font-lock)
 
 (add-hook 'lispy-connected-hook (lambda ()
                                   (setq lispy-require-end-of-line t)
-                                  (turn-on-font-lock)
                                   (lispy-message (format "set client %s\n" lispy-version))))
 (add-hook 'lispy-disconnected-hook (lambda ()
                                   (setq lispy-require-end-of-line nil)))
 (add-hook 'lispy-exit-hook (lambda ()
                              (kill-buffer lispy-buffer)))
 
+(require 'lispy-commands)
+(require 'lispy-history)
+(require 'lispy-font-lock)
 (require 'lispy-occur)
-
 (require 'lispy-session)
+(require 'lispy-osd)
 
 (provide 'lispy)
 ;;; lispy.el ends here

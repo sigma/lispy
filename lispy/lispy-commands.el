@@ -1,9 +1,9 @@
-;;; lispy-commands.el --- 
+;;; lispy-commands.el ---
 
 ;; Copyright (C) 2004  Free Software Foundation, Inc.
 
 ;; Author: Yann Hodique <Yann.Hodique@lifl.fr>
-;; Keywords: 
+;; Keywords:
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
@@ -56,10 +56,6 @@
 (defun lispy-kick ()
   (interactive)
   (lispy-send-entry (concat "kick " (lispy-region-or-word) " ")))
-
-(defun lispy-quit ()
-  (interactive)
-  (lispy-message "quit"))
 
 (defun lispy-url ()
   (interactive)

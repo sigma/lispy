@@ -28,6 +28,8 @@
 
 (require 'lispy-vars)
 
+(defvar lispy-occur-mode-map '())
+
 (defvar lispy-occur-buffers nil "")
 
 (defun lispy-occur (regexp buffername prefix &optional filter)

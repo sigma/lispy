@@ -92,5 +92,9 @@
           (setq lispy-read-user-list t
                 lispy-insert-line nil)))))
 
+(defun lispy-quit ()
+  (interactive)
+  (lispy-message "quit"))
+
 (provide 'lispy-utils)
 ;;; lispy-utils.el ends here
