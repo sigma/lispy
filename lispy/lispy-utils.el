@@ -108,5 +108,17 @@
   (interactive)
   (lispy-message "quit"))
 
+(defconst lispy-emacs-version
+  (progn
+    (string-match "^\\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)" emacs-version)
+    (+ (* (string-to-int (match-string 1 emacs-version)) 10000)
+     (* (string-to-int (match-string 2 emacs-version)) 100)
+     (string-to-int (match-string 3 emacs-version)))))
+
+(defun lispy-split-string (str sep)
+  (if (>= lispy-emacs-version 210350)
+      (split-string str sep t)
+    (split-string str sep)))
+
 (provide 'lispy-utils)
 ;;; lispy-utils.el ends here

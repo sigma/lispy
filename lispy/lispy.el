@@ -46,34 +46,36 @@
     (let* ((string2 (concat lispy-insert-buffer (replace-regexp-in-string "\r" "" string)))
            (str (if lispy-require-end-of-line
                     (progn
-                      (let ((pos (- (length string2) 1 (string-match "\n" (apply 'string (reverse (string-to-list string2)))))))
-                        (setq lispy-insert-buffer (substring string2 (+ pos 1) nil))
+                      (let ((pos (- (length string2) (string-match "\n" (apply 'string (reverse (string-to-list string2)))))))
+                        (setq lispy-insert-buffer (if (< pos (length string2))
+                                                      (substring string2 pos nil) ""))
                         (substring string2 0 pos)))
                   string2)))
       (mapcar (lambda (seq)
-                (if (string-match (concat "^" (regexp-quote (car seq)) ".*") str)
+                (if (string-match (regexp-quote (car seq)) str)
                     (progn
                       (funcall (cdr seq))
                       (setq str (replace-regexp-in-string (regexp-quote (car seq)) "" str)))))
               lispy-telnet-sequences)
-      (let ((strlist (split-string str "[\n]"))
+
+      (let ((strlist (lispy-split-string str "[\n]"))
             (inhibit-read-only t))
         (save-excursion
-        (mapcar (lambda (s)
-                  (let ((st (concat s "\n")))
-                    (run-hook-with-args 'lispy-pre-insert-hook st)
-                    (cond
-                     ((eq lispy-insert-line t)
-                      (condition-case nil
-                          (progn
-                            (goto-char (process-mark proc))
-                            (insert-before-markers st))
-                        (error (insert st)))
-                      (set-marker (process-mark proc) (point)))
-                     ((eq lispy-insert-line 'next)
-                      (setq lispy-insert-line t)))
-                    (run-hook-with-args 'lispy-post-insert-hook st)))
-                strlist))))
+          (mapcar (lambda (s)
+                    (let ((st (concat s "\n")))
+                      (run-hook-with-args 'lispy-pre-insert-hook st)
+                      (cond
+                       ((eq lispy-insert-line t)
+                        (condition-case nil
+                            (progn
+                              (goto-char (process-mark proc))
+                              (insert-before-markers st))
+                          (error (insert st)))
+                        (set-marker (process-mark proc) (point)))
+                       ((eq lispy-insert-line 'next)
+                        (setq lispy-insert-line t)))
+                      (run-hook-with-args 'lispy-post-insert-hook st)))
+                  strlist))))
     (if lispy-read-password
         (process-send-string lispy-process (concat (read-passwd "") "\n")))
     (goto-char (process-mark proc))
