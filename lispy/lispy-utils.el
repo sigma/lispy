@@ -29,17 +29,20 @@
 (require 'lispy-vars)
 
 (defun lispy-case-unsensitive (s)
+  "Generate a regexp for matching S case unsensitive."
   (let ((up (upcase s)) (down (downcase s)))
     (lispy-generate-regexp (string-to-list up) (string-to-list down)))
 )
 
 (defun lispy-generate-regexp (s1 s2)
+  "Generate mixed regexp from S1 and S2."
   (and s1
        (concat (concat "[" (char-to-string (car s1)) (char-to-string (car s2)) "]")
 	       (lispy-generate-regexp (cdr s1) (cdr s2))
 	       )))
 
 (defun lispy-region-or-word ()
+  "If mark is active, return the selected region, else return word at point."
   (if mark-active
       (prog1
           (buffer-substring (region-beginning) (region-end))
@@ -47,18 +50,22 @@
     (word-at-point)))
 
 (defun lispy-turn-on-echo ()
+  "Turn echo on."
   (setq lispy-read-password nil))
 
 (defun lispy-turn-off-echo ()
+  "Turn echo off."
   (setq lispy-read-password t))
 
 (defun lispy-clear-text-area ()
+  "Clear the typing region."
   (delete-region (point-min) (point-max)))
 
 (defun lispy-beep ()
   (ding))
 
 (defun lispy-message (s)
+  "Send the message S to the lispy process"
   (interactive)
   (and s
        (progn
@@ -72,6 +79,7 @@
   (insert (concat prefix " " default)))
 
 (defun lispy-send ()
+  "Send the text in current buffer."
   (interactive)
   (let ((s (buffer-string)))
     (if (not (equal s ""))
@@ -81,6 +89,7 @@
           ))))
 
 (defun lispy-fetch-user-list (string)
+  "Fetch user list from server, receiving STRING. To be used from `lispy-pre-insert-hook'."
   (if lispy-read-user-list
         (cond
          ((string-match "^<Mtp> There " string)
@@ -95,6 +104,7 @@
                 lispy-insert-line nil)))))
 
 (defun lispy-quit ()
+  "Close connection softly by sending appropriate message to server."
   (interactive)
   (lispy-message "quit"))
 

@@ -32,6 +32,7 @@
 (require 'lispy-send)
 
 (defun lispy-not-yet-connected (string)
+  "This function is called  from `lispy-pre-insert-hook' as long as user is not authenticated. When STRING matches an acknowledgement, the hook is cleared"
   (cond
    ((string-match "^<Mtp> Welcome, \\(\\w+\\)*\\." string)
     (setq lispy-remote-user (match-string 1 string))
@@ -40,6 +41,7 @@
    ))
 
 (defun lispy-filter (proc string)
+  "Filter output STRING from processus PROC"
   (with-current-buffer lispy-buffer
     (let* ((string2 (concat lispy-insert-buffer (replace-regexp-in-string "\r" "" string)))
            (str (if lispy-require-end-of-line
@@ -78,12 +80,14 @@
     ))
 
 (defun lispy-sentinel (process event)
+  "Function to call when the processus PROCESS receives EVENT. Used to signal disconnection."
   (message
    (format "Process: %s had the event `%s'" process event)
    (run-hooks 'lispy-disconnected-hook)))
 
 ;;;###autoload
 (defun lispy (host port &optional buffer)
+  "Main function for Lispy client. Connect to HOST:PORT, output to BUFFER"
   (interactive (list (read-from-minibuffer "Telnet host: " lispy-default-host)
                      (read-from-minibuffer "Port: " lispy-default-port)))
   (let* ((buffer-name lispy-buffer-name)
@@ -102,8 +106,7 @@
     (lispy-mode)))
 
 (defun lispy-mode (&optional sub)
-  "Set major-mode for mtp sessions.
-If `lispy-mode-hook' is set, run it."
+  "Set major-mode for mtp sessions. If `lispy-mode-hook' is set, run it."
   (interactive)
   (mapcar 'make-local-variable '(
                                         ;lispy-host lispy-port lispy-remote-user lispy-buffer
@@ -152,7 +155,7 @@ If `lispy-mode-hook' is set, run it."
 (require 'lispy-font-lock)
 (require 'lispy-occur)
 (require 'lispy-session)
-(require 'lispy-osd)
+;(require 'lispy-osd)
 
 (provide 'lispy)
 ;;; lispy.el ends here
