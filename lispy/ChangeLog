@@ -1,3 +1,16 @@
+2004-08-10  Yann Hodique  <Yann.Hodique@lifl.fr>
+
+	* lispy-utils.el
+	(lispy-completion-tmp): new variable
+	(lispy-complete-nickname): new function
+
+	* lispy-send.el
+	(lispy-utils): fix requirements
+	(lispy-send-mode-map): use nick completion
+
+	* lispy-occur.el
+	(lispy-occur-mode-map): better using nil than '()
+
 2004-08-04  Yann Hodique  <Yann.Hodique@lifl.fr>
 
 	* lispy-utils.el

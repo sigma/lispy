@@ -26,6 +26,8 @@
 
 ;;; Code:
 
+(require 'lispy-utils)
+
 (defun lispy-reach-sending-buffer ()
   (interactive)
   (if (or (null lispy-send-buffer)
@@ -47,6 +49,7 @@
 (setq lispy-send-mode-map (make-keymap))
 (define-key lispy-send-mode-map "\C-m" 'lispy-send)
 (define-key lispy-send-mode-map [\M-return] 'newline)
+(define-key lispy-send-mode-map [tab] 'lispy-complete-nickname)
 
 (add-hook 'lispy-post-message-hook (lambda (s)
                                   (if (eq (window-buffer) lispy-send-buffer)

@@ -142,5 +142,31 @@
     (setcdr code `(() (,function) (remove-hook ',hook ',code ',local)))
     (add-hook hook code append local)))
 
+(lispy-defvar lispy-completion-tmp nil)
+
+(require 'thingatpt)
+(defun lispy-complete-nickname ()
+  (interactive)
+  (let ((wap (word-at-point))
+        (current-completion nil)
+        (min-completion nil))
+    (if wap
+        (progn
+          (if (eq last-command this-command)
+              (setq min-completion wap)
+            (setq lispy-completion-tmp wap))
+          (dolist (nick lispy-user-list)
+            (when (and (string-match (format "^%s" lispy-completion-tmp) nick)
+                       ;;(string< lispy-completion-tmp nick)
+                       (or (not current-completion)
+                           (string< nick current-completion))
+                       (or (not min-completion)
+                           (string< min-completion nick)))
+              (setq current-completion nick)))
+          (when current-completion
+            (progn
+              (backward-delete-char (length wap))
+              (insert current-completion)))))))
+
 (provide 'lispy-utils)
 ;;; lispy-utils.el ends here

@@ -28,7 +28,7 @@
 
 (require 'lispy-vars)
 
-(defvar lispy-occur-mode-map '())
+(defvar lispy-occur-mode-map nil)
 
 (defvar lispy-occur-buffers nil "")
 
