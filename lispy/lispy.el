@@ -143,11 +143,12 @@
                                          (lispy-quit))
                                      (run-hooks 'lispy-exit-hook)))
 
-
 (add-hook 'lispy-connected-hook (lambda ()
                                   (setq lispy-connected t
                                         lispy-require-end-of-line t)
-                                  (lispy-message (format "set client %s\n" lispy-version))))
+                                  (lispy-message (format "set client %s\n" lispy-version))
+                                  (lispy-fetch)))
+
 (add-hook 'lispy-disconnected-hook (lambda ()
                                      (setq lispy-connected nil
                                            lispy-require-end-of-line nil)))

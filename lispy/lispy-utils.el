@@ -89,7 +89,7 @@
           ))))
 
 (defun lispy-read-password ()
-  (read-passwd ""))
+  (or lispy-password (read-passwd "")))
 
 (defun lispy-fetch-user-list (string)
   "Fetch user list from server, receiving STRING. To be used from `lispy-pre-insert-hook'."

@@ -1,0 +1,20 @@
+2004-06-30  Yann Hodique  <Yann.Hodique@lifl.fr>
+
+	* lispy.el
+	(lispy-connected-hook): automatically fetch user list
+
+	* lispy-vars.el
+	(lispy-version): new version
+	(lispy-password): new variable
+
+	* lispy-utils.el
+	(lispy-read-password): use lispy-password if set
+
+	* lispy-session.el
+	(lispy-session-current-session): new variable
+	(lispy): send login when available
+	(lispy-read-password): new advice
+
+	* lispy-occur.el
+	(lispy-occur-tell): complete with logged user names
+

@@ -26,7 +26,7 @@
 
 ;;; Code:
 
-(defvar lispy-version "Lispy 0.3"
+(defvar lispy-version "Lispy 0.4"
   "*Version of the program")
 
 (defvar lispy-mode-hook nil "*Hook to run after setting current buffer to lispy-mode.")
@@ -44,6 +44,7 @@
 (defvar lispy-host nil)
 (defvar lispy-port nil)
 (defvar lispy-remote-user nil "")
+(defvar lispy-password nil "")
 (defvar lispy-echo-off nil "")
 (defvar lispy-read-user-list nil "")
 (defvar lispy-user-list nil "")

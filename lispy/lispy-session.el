@@ -27,18 +27,27 @@
 ;;; Code:
 
 (defvar lispy-session-alist '(("zen" "zen.dtdns.net" 4000)
-                              ("home" "sigmamtp.dyndns.org" 5000)
+                              ("home" "sigmamtp.dyndns.org" 5000 "Sigma" nil)
                               ("local" "localhost" 5000)) "")
 
-(defadvice lispy (around before-lispy-session activate)
+(defvar lispy-session-current-session nil)
+
+(defadvice lispy (around around-lispy-session activate)
   (interactive (let ((elem (assoc
                             (completing-read "Session: "
                                              (let ((i -1))
                                                (mapcar (lambda (e) (list (car e) (incf i)))
                                                        lispy-session-alist)))
                             lispy-session-alist)))
+                 (setq lispy-session-current-session elem)
                  (list (nth 1 elem) (nth 2 elem))))
-  ad-do-it)
+  ad-do-it
+  (when (nth 3 lispy-session-current-session)
+    (lispy-message (nth 3 lispy-session-current-session))))
+
+(defadvice lispy-read-password (around around-lisp-read-password activate)
+  (let ((lispy-password (nth 4 lispy-session-current-session)))
+      ad-do-it))
 
 (provide 'lispy-session)
 ;;; lispy-session.el ends here
