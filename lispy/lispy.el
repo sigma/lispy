@@ -43,7 +43,8 @@
 (defun lispy-filter (proc string)
   "Filter output STRING from processus PROC"
   (with-current-buffer lispy-buffer
-    (let* ((string2 (concat lispy-insert-buffer (replace-regexp-in-string "\r" "" string)))
+    (let* ((move (= (point) (point-min)))
+           (string2 (concat lispy-insert-buffer (replace-regexp-in-string "\r" "" string)))
            (str (if lispy-require-end-of-line
                     (progn
                       (let ((pos (- (length string2) (string-match "\n" (apply 'string (reverse (string-to-list string2)))))))
@@ -75,11 +76,10 @@
                        ((eq lispy-insert-line 'next)
                         (setq lispy-insert-line t)))
                       (run-hook-with-args 'lispy-post-insert-hook st)))
-                  strlist))))
+                  strlist)))
+      (when move (goto-char (process-mark proc))))
     (if lispy-read-password
-        (process-send-string lispy-process (concat (read-passwd "") "\n")))
-    (goto-char (process-mark proc))
-    ))
+        (process-send-string lispy-process (concat (read-passwd "") "\n")))))
 
 (defun lispy-sentinel (process event)
   "Function to call when the processus PROCESS receives EVENT. Used to signal disconnection."
@@ -151,13 +151,6 @@
                                            lispy-require-end-of-line nil)))
 (add-hook 'lispy-exit-hook (lambda ()
                              (kill-buffer lispy-buffer)))
-
-(require 'lispy-commands)
-(require 'lispy-history)
-(require 'lispy-font-lock)
-(require 'lispy-occur)
-(require 'lispy-session)
-;(require 'lispy-osd)
 
 (provide 'lispy)
 ;;; lispy.el ends here
