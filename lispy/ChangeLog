@@ -1,5 +1,8 @@
 2004-09-05  Yann Hodique  <Yann.Hodique@lifl.fr>
 
+	* lispy-limit.el:
+	initial checkin
+
 	* lispy-autoreconnect.el:
 	new variables
 	(lispy-check-reconnect): check if a reconnection is needed
