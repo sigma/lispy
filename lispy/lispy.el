@@ -95,21 +95,6 @@
       (message (format "Process: %s had the event `%s'" process event))
       (run-hooks 'lispy-disconnected-hook))))
 
-(defun lispy-reconnect ()
-  (interactive)
-  (unless lispy-inhibit-reconnect
-    (progn
-;;       (condition-case nil
-;;           (progn
-;;             (lispy-quit)
-;;             (sit-for 1))
-;;         (error nil))
-      (let ((lispy-inhibit-reconnect t))
-        (run-hooks 'lispy-disconnected-hook))
-      (lispy lispy-host lispy-port lispy-buffer)
-      (lispy-update-buffer-hierarchy (current-buffer) 'lispy-process)
-      (goto-char (point-max)))))
-
 ;;;###autoload
 (defun lispy (host port &optional buffer)
   "Main function for Lispy client. Connect to HOST:PORT, output to BUFFER"
@@ -163,8 +148,6 @@
                                          (lispy-quit))
                                      (run-hooks 'lispy-exit-hook)))
 
-(define-key lispy-mode-map "\C-cR" 'lispy-reconnect)
-
 (add-hook 'lispy-connected-hook (lambda ()
                                   (setq lispy-connected t
                                         lispy-require-end-of-line t)
@@ -175,8 +158,6 @@
                                      (setq lispy-connected nil
                                            lispy-require-end-of-line nil
                                            lispy-echo-off nil)))
-
-(add-hook 'lispy-disconnected-hook 'lispy-reconnect)
 
 (add-hook 'lispy-exit-hook (lambda ()
                              (kill-buffer lispy-buffer)))

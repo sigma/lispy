@@ -36,10 +36,19 @@
      (make-variable-buffer-local ',symbol)
      (add-to-list 'lispy-buffer-local-variables ',symbol)))
 
+;; stolen from w3
+(defun lispy-symbol-value-in-buffer (symbol buffer &optional unbound-value)
+  "Return the value of SYMBOL in BUFFER, or UNBOUND-VALUE if it is unbound."
+  (save-excursion
+    (set-buffer buffer)
+    (if (not (boundp symbol))
+	unbound-value
+      (symbol-value symbol))))
+
 (defun lispy-inherit-buffer-local-variables (from &optional to)
   (let* ((orig from)
          (target (or to (current-buffer)))
-         (values (mapcar (lambda (s) (cons s (symbol-value-in-buffer s orig))) lispy-buffer-local-variables))
+         (values (mapcar (lambda (s) (cons s (lispy-symbol-value-in-buffer s orig))) lispy-buffer-local-variables))
          (node (assoc orig lispy-buffer-local-hierarchy)))
     (if node
         (unless (member target (cdr node))
@@ -59,7 +68,7 @@
 
 (defun lispy-update-buffer-hierarchy (buffer &rest variables)
   (mapc (lambda (variable)
-          (let ((value (symbol-value-in-buffer variable buffer))
+          (let ((value (lispy-symbol-value-in-buffer variable buffer))
                 (node (assoc buffer lispy-buffer-local-hierarchy)))
             (when node
               (mapc (lambda (b)
@@ -74,6 +83,13 @@
 
 (defvar lispy-version "Lispy 0.5"
   "*Version of the program")
+
+(defconst lispy-emacs-version
+  (progn
+    (string-match "^\\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)" emacs-version)
+    (+ (* (string-to-int (match-string 1 emacs-version)) 10000)
+     (* (string-to-int (match-string 2 emacs-version)) 100)
+     (string-to-int (match-string 3 emacs-version)))))
 
 (defvar lispy-mode-hook nil "*Hook to run after setting current buffer to lispy-mode.")
 (defvar lispy-pre-insert-hook nil "Hook to run before inserting a new line. Functions are called with the string as argument")
@@ -101,7 +117,6 @@
 (lispy-defvar lispy-connected nil "")
 
 (lispy-defvar lispy-inhibit-sentinel nil "")
-(lispy-defvar lispy-inhibit-reconnect nil "")
 
 (defvar lispy-mode-map '())
 (defvar lispy-send-mode-map '())

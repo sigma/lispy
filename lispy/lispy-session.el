@@ -1,4 +1,4 @@
-;;; lispy-session.el ---
+;;; lispy-session.el --- Use symbolic names for you sessions
 
 ;; Copyright (C) 2004  Free Software Foundation, Inc.
 
@@ -40,7 +40,7 @@
                                                (mapcar (lambda (e) (list (car e) (incf i)))
                                                        lispy-session-alist)))
                             lispy-session-alist)))
-                 (lispy-add-hook-once 'lispy-mode-hook `(lambda () 
+                 (lispy-add-hook-once 'lispy-mode-hook `(lambda ()
                                                           (setq lispy-session-current-session ',elem)))
                  (list (nth 1 elem) (nth 2 elem))))
   ad-do-it
@@ -55,7 +55,7 @@
   (let ((elem (if (stringp s)
                   (assoc s lispy-session-alist)
                 s)))
-    (lispy-add-hook-once 'lispy-mode-hook `(lambda () 
+    (lispy-add-hook-once 'lispy-mode-hook `(lambda ()
                                              (setq lispy-session-current-session ',elem)))
     (lispy (nth 1 elem) (nth 2 elem))))
 
