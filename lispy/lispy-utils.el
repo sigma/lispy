@@ -51,11 +51,11 @@
 
 (defun lispy-turn-on-echo ()
   "Turn echo on."
-  (setq lispy-read-password nil))
+  (setq lispy-echo-off nil))
 
 (defun lispy-turn-off-echo ()
   "Turn echo off."
-  (setq lispy-read-password t))
+  (setq lispy-echo-off t))
 
 (defun lispy-clear-text-area ()
   "Clear the typing region."
@@ -87,6 +87,9 @@
           (lispy-clear-text-area)
           (lispy-message (concat lispy-send-prefix s))
           ))))
+
+(defun lispy-read-password ()
+  (read-passwd ""))
 
 (defun lispy-fetch-user-list (string)
   "Fetch user list from server, receiving STRING. To be used from `lispy-pre-insert-hook'."

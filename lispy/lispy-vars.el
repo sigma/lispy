@@ -44,7 +44,7 @@
 (defvar lispy-host nil)
 (defvar lispy-port nil)
 (defvar lispy-remote-user nil "")
-(defvar lispy-read-password nil "")
+(defvar lispy-echo-off nil "")
 (defvar lispy-read-user-list nil "")
 (defvar lispy-user-list nil "")
 (defvar lispy-insert-line t "")

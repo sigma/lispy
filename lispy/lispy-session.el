@@ -30,14 +30,15 @@
                               ("home" "sigmamtp.dyndns.org" 5000)
                               ("local" "localhost" 5000)) "")
 
-(defadvice lispy (before before-lispy-session activate)
+(defadvice lispy (around before-lispy-session activate)
   (interactive (let ((elem (assoc
                             (completing-read "Session: "
                                              (let ((i -1))
                                                (mapcar (lambda (e) (list (car e) (incf i)))
                                                        lispy-session-alist)))
                             lispy-session-alist)))
-                 (list (nth 1 elem) (nth 2 elem)))))
+                 (list (nth 1 elem) (nth 2 elem))))
+  ad-do-it)
 
 (provide 'lispy-session)
 ;;; lispy-session.el ends here

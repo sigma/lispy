@@ -78,8 +78,8 @@
                       (run-hook-with-args 'lispy-post-insert-hook st)))
                   strlist)))
       (when move (goto-char (process-mark proc))))
-    (if lispy-read-password
-        (process-send-string lispy-process (concat (read-passwd "") "\r\n")))))
+    (if lispy-echo-off
+        (process-send-string lispy-process (concat (lispy-read-password) "\r\n")))))
 
 (defun lispy-sentinel (process event)
   "Function to call when the processus PROCESS receives EVENT. Used to signal disconnection."
