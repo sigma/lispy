@@ -1,31 +1,55 @@
+2004-09-05  Yann Hodique  <Yann.Hodique@lifl.fr>
+
+	* lispy-autoreconnect.el:
+	new variables
+	(lispy-check-reconnect): check if a reconnection is needed
+	(lispy-start-timer): new function
+	(lispy-stop-timer): new function
+	(lispy-reset-timer): new function
+	(lispy-pre-insert-hook): reinitialise the automaton
+	(lispy-connected-hook): automatically start the timer
+
+	* lispy.el:
+	move autoreconnect code to lispy-autoreconnect
+
+	* lispy-vars.el:
+	(lispy-symbol-value-in-buffer): new function stolen from w3
+
+	* lispy-utils.el:
+	(lispy-quit): move lispy-reconnect code to lispy-autoreconnect
+	move lispy-emacs-version to lispy-vars
+
+	* lispy-autoreconnect.el:
+	initial checkin
+
 2004-08-13  Yann Hodique  <Yann.Hodique@lifl.fr>
 
-	* lispy-vars.el
+	* lispy-vars.el:
 	(lispy-version): let's say that this is 0.5 release :)
 
 2004-08-10  Yann Hodique  <Yann.Hodique@lifl.fr>
 
-	* lispy-utils.el
+	* lispy-utils.el:
 	(lispy-completion-tmp): new variable
 	(lispy-complete-nickname): new function
 
-	* lispy-send.el
+	* lispy-send.el:
 	(lispy-utils): fix requirements
 	(lispy-send-mode-map): use nick completion
 
-	* lispy-occur.el
+	* lispy-occur.el:
 	(lispy-occur-mode-map): better using nil than '()
 
 2004-08-04  Yann Hodique  <Yann.Hodique@lifl.fr>
 
-	* lispy-utils.el
+	* lispy-utils.el:
 	(lispy-message): renamed hooks
 	(lispy-send): new hook
 
-	* lispy-send.el
+	* lispy-send.el:
 	(lispy-post-message-hook): renamed hook
 
-	* lispy-history.el
+	* lispy-history.el:
 	(lispy-post-message-hook): renamed hook
 
 	* lispy-h4x0r.el:
@@ -33,26 +57,26 @@
 
 2004-08-02  Yann Hodique  <Yann.Hodique@lifl.fr>
 
-	* lispy.el
+	* lispy.el:
 	(lispy-sentinel): this function was trashed
 	(self-insert-command): also insert non-ascii chars
 	(lispy-disconnected-hook): make lispy-reconnect a hook of its own
 
-	* lispy-vars.el
+	* lispy-vars.el:
 	(lispy-inhibit-reconnect): new variable
 
-	* lispy-utils.el
+	* lispy-utils.el:
 	(lispy-message): double the ÿ chars in emitting, reconnect when error happens
 	(lispy-quit): inhibit reconnect when leaving the regular way
 
 2004-07-30  Yann Hodique  <Yann.Hodique@lifl.fr>
 
-	* lispy.el
+	* lispy.el:
 	(lispy-sentinel): add the possibility to inhibit it
 	(lispy-reconnect): new function
 	(lispy): make lispy-not-yet-connected local hook
 
-	* lispy-vars.el
+	* lispy-vars.el:
 	(lispy-buffer-local-variables): new variable
 	(lispy-buffer-local-hierarchy): new variable
 	(lispy-defvar): new macro
@@ -61,11 +85,11 @@
 	(lispy-update-buffer-hierarchy): new function
 	use lispy-defvar when needed
 
-	* lispy-utils.el
+	* lispy-utils.el:
 	(lispy-quit): inhibit sentinel
 	(lispy-add-hook-once): new function
 
-	* lispy-session.el
+	* lispy-session.el:
 	(lispy-vars): missing require
 	(lispy-session-alist): remove local-specific entries
 	(lispy-session-current-session): new variable
@@ -73,32 +97,32 @@
 	(lispy-read-password): fix advice name
 	(lispy-session): new function
 
-	* lispy-send.el
+	* lispy-send.el:
 	(lispy-init-send-buffer): inherit local variables from base buffer
 
-	* lispy-occur.el
+	* lispy-occur.el:
 	(lispy-occur): inherit local variables from base buffer
 
-	* lispy-history.el
+	* lispy-history.el:
 	(lispy-vars): missing require
 
 2004-06-30  Yann Hodique  <Yann.Hodique@lifl.fr>
 
-	* lispy.el
+	* lispy.el:
 	(lispy-connected-hook): automatically fetch user list
 
-	* lispy-vars.el
+	* lispy-vars.el:
 	(lispy-version): new version
 	(lispy-password): new variable
 
-	* lispy-utils.el
+	* lispy-utils.el:
 	(lispy-read-password): use lispy-password if set
 
-	* lispy-session.el
+	* lispy-session.el:
 	(lispy-session-current-session): new variable
 	(lispy): send login when available
 	(lispy-read-password): new advice
 
-	* lispy-occur.el
+	* lispy-occur.el:
 	(lispy-occur-tell): complete with logged user names
 

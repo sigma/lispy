@@ -30,16 +30,15 @@
 (require 'lispy-vars)
 
 (lispy-defvar lispy-inhibit-reconnect nil "")
+(lispy-defvar lispy-reconnect-status nil "")
+(lispy-defvar lispy-reconnect-ping nil)
+(lispy-defvar lispy-timer nil "")
+(lispy-defvar lispy-timer-delay nil "")
 
 (defun lispy-reconnect ()
   (interactive)
   (unless lispy-inhibit-reconnect
     (progn
-;;       (condition-case nil
-;;           (progn
-;;             (lispy-quit)
-;;             (sit-for 1))
-;;         (error nil))
       (let ((lispy-inhibit-reconnect t))
         (run-hooks 'lispy-disconnected-hook))
       (lispy lispy-host lispy-port lispy-buffer)
@@ -47,12 +46,40 @@
       (goto-char (point-max)))))
 
 (defadvice lispy-quit (before before-lispy-quit act)
-    (setq lispy-inhibit-reconnect t)
-    (lispy-update-buffer-hierarchy (current-buffer) 'lispy-inhibit-reconnect))
+  (lispy-stop-timer)
+  (setq lispy-inhibit-reconnect t)
+  (lispy-update-buffer-hierarchy (current-buffer) 'lispy-inhibit-reconnect))
+
+(defun lispy-check-reconnect ()
+  (cond ((equal lispy-reconnect-status nil)
+         (setq lispy-reconnect-status 'ask))
+        ((equal lispy-reconnect-status 'ask)
+         (when lispy-reconnect-ping
+           (funcall lispy-reconnect-ping)
+           (setq lispy-reconnect-status 'reconnect)))
+        ((equal lispy-reconnect-status 'reconnect)
+         (lispy-reconnect))))
+
+(defun lispy-start-timer ()
+  (setq lispy-reconnect-status nil)
+  (when lispy-timer-delay
+    (setq lispy-timer (run-with-timer lispy-timer-delay lispy-timer-delay 'lispy-check-reconnect))))
+
+(defun lispy-stop-timer ()
+  (when lispy-timer
+    (cancel-timer lispy-timer)
+    (setq lispy-timer nil)))
+
+(defun lispy-reset-timer (&rest args)
+  (lispy-stop-timer)
+  (lispy-start-timer))
 
 (define-key lispy-mode-map "\C-cR" 'lispy-reconnect)
 
+(add-hook 'lispy-pre-insert-hook (lambda (&rest args)
+                                   (setq lispy-reconnect-status nil)))
 (add-hook 'lispy-disconnected-hook 'lispy-reconnect)
+(add-hook 'lispy-connected-hook 'lispy-start-timer)
 
 (provide 'lispy-autoreconnect)
 ;;; lispy-autoreconnect.el ends here
