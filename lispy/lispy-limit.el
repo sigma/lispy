@@ -22,7 +22,8 @@
 
 ;;; Commentary:
 
-;;
+;; control the amount of text that is kept in the buffer. Written for
+;; Erbot, you probably don't need it.
 
 ;;; Code:
 

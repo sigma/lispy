@@ -22,7 +22,16 @@
 
 ;;; Commentary:
 
+;; autoreconnect facility. This feature was created for ErBot, you'd better
+;; think twice before using it. If you really want to, here is a sample:
 ;;
+;; (require 'lispy-auto-reconnect)
+;; (setq lispy-reconnect-ping (lambda () (lispy-message "plop")))
+;; (setq lispy-timer-delay 300)
+;;
+;; This will launch the message every 5 minutes if nothing has been received
+;; during the last interval. If no message is received in response, the
+;; reconnection is activated
 
 ;;; Code:
 
@@ -31,9 +40,9 @@
 
 (lispy-defvar lispy-inhibit-reconnect nil "")
 (lispy-defvar lispy-reconnect-status nil "")
-(lispy-defvar lispy-reconnect-ping nil)
+(defvar lispy-reconnect-ping nil)
 (lispy-defvar lispy-timer nil "")
-(lispy-defvar lispy-timer-delay nil "")
+(defvar lispy-timer-delay nil "")
 
 (defun lispy-reconnect ()
   (interactive)

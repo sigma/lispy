@@ -1,4 +1,4 @@
-;;; lispy-osd.el ---
+;;; lispy-osd.el --- Osd support for Lispy
 
 ;; Copyright (C) 2004  Free Software Foundation, Inc.
 
@@ -22,7 +22,8 @@
 
 ;;; Commentary:
 
-;;
+;; requires the osd.el package available as a separate package there:
+;; http://www.lifl.fr/~hodique/pmwiki/uploads/Perso/osd.el
 
 ;;; Code:
 

@@ -1,4 +1,4 @@
-;;; lispy-send.el ---
+;;; lispy-send.el --- Sending messages with Lispy
 
 ;; Copyright (C) 2004  Free Software Foundation, Inc.
 

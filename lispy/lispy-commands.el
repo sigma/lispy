@@ -1,4 +1,4 @@
-;;; lispy-commands.el ---
+;;; lispy-commands.el --- Some basic commands for Lispy
 
 ;; Copyright (C) 2004  Free Software Foundation, Inc.
 
@@ -22,7 +22,10 @@
 
 ;;; Commentary:
 
+;; This module provides basic commands and shortcuts for a chat session.
+;; In order to use it, just
 ;;
+;; (require 'lispy-commands)
 
 ;;; Code:
 

@@ -22,7 +22,10 @@
 
 ;;; Commentary:
 
+;; remember what you typed in the past, and resend it :)
+;; (require 'lispy-history)
 ;;
+;; int the sending buffer, M-p and M-n make you navigate through history
 
 ;;; Code:
 

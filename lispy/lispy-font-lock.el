@@ -1,4 +1,4 @@
-;;; lispy-font-lock.el ---
+;;; lispy-font-lock.el --- Some fontification for lispy buffers
 
 ;; Copyright (C) 2004  Free Software Foundation, Inc.
 
@@ -22,7 +22,8 @@
 
 ;;; Commentary:
 
-;;
+;; add color to your Lispy by
+;; (require 'lispy-font-lock)
 
 ;;; Code:
 

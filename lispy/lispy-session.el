@@ -22,7 +22,11 @@
 
 ;;; Commentary:
 
+;; use something like
+;; (setq lispy-session-alist '(("name1" "host1" "port1" "login1" "password1")
+;;                             ("name2" "host2" "port2" "login2" "password2")))
 ;;
+;; login and password are optional.
 
 ;;; Code:
 

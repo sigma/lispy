@@ -1,4 +1,4 @@
-;;; lispy-occur.el ---
+;;; lispy-occur.el --- Occur mode for Lispy
 
 ;; Copyright (C) 2004  Free Software Foundation, Inc.
 

@@ -1,4 +1,4 @@
-;;; lispy-vars.el ---
+;;; lispy-vars.el --- common variables for Lispy
 
 ;; Copyright (C) 2004  Free Software Foundation, Inc.
 
@@ -22,7 +22,8 @@
 
 ;;; Commentary:
 
-;;
+;; This file contains the variables for a basic Lispy, and the functions
+;; related to variable maipulations.
 
 ;;; Code:
 
@@ -81,7 +82,7 @@
                     (cdr node)))))
         variables))
 
-(defvar lispy-version "Lispy 0.5"
+(defvar lispy-version "Lispy 0.6"
   "*Version of the program")
 
 (defconst lispy-emacs-version

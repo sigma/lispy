@@ -22,7 +22,9 @@
 
 ;;; Commentary:
 
-;;
+;; The base code for Lispy
+;; (require 'lispy)
+;; to know its power ;)
 
 ;;; Code:
 
@@ -151,8 +153,7 @@
 (add-hook 'lispy-connected-hook (lambda ()
                                   (setq lispy-connected t
                                         lispy-require-end-of-line t)
-                                  (lispy-message (format "set client %s\n" lispy-version))
-                                  (lispy-fetch)))
+                                  (lispy-message (format "set client %s\n" lispy-version))))
 
 (add-hook 'lispy-disconnected-hook (lambda ()
                                      (setq lispy-connected nil

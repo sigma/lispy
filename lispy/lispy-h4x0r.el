@@ -1,4 +1,4 @@
-;;; lispy-h4x0r.el ---
+;;; lispy-h4x0r.el --- h4x0r mode for Lispy
 
 ;; Copyright (C) 2004  Free Software Foundation, Inc.
 
@@ -22,7 +22,10 @@
 
 ;;; Commentary:
 
-;;
+;; perform a 177t transformation of your sentences before sending them
+;; requires the h4x0r.el package, available as a separate package, for
+;; example there:
+;; http://www.lifl.fr/~hodique/pmwiki/uploads/Perso/h4x0r.el
 
 ;;; Code:
 
