@@ -31,15 +31,14 @@
                               ("local" "localhost" 5000)) "")
 
 (fset 'lispy
-      `(lambda ()
-        (interactive)
-        (let ((elem (assoc
-                     (completing-read "Session: "
-                                      (let ((i -1))
-                                        (mapcar (lambda (e) (list (car e) (incf i)))
-                                                lispy-session-alist)))
-                     lispy-session-alist)))
-          (funcall ,(symbol-function 'lispy) (nth 1 elem) (nth 2 elem)))))
+      `(lambda (elem)
+         (interactive (list (assoc
+                             (completing-read "Session: "
+                                              (let ((i -1))
+                                                (mapcar (lambda (e) (list (car e) (incf i)))
+                                                        lispy-session-alist)))
+                             lispy-session-alist)))
+         (funcall ,(symbol-function 'lispy) (nth 1 elem) (nth 2 elem))))
 
 (provide 'lispy-session)
 ;;; lispy-session.el ends here
