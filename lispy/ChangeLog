@@ -1,11 +1,25 @@
+2004-08-02  Yann Hodique  <Yann.Hodique@lifl.fr>
+
+	* lispy.el
+	(lispy-sentinel): this function was trashed
+	(self-insert-command): also insert non-ascii chars
+	(lispy-disconnected-hook): make lispy-reconnect a hook of its own
+
+	* lispy-vars.el
+	(lispy-inhibit-reconnect): new variable
+
+	* lispy-utils.el
+	(lispy-message): double the ÿ chars in emitting, reconnect when error happens
+	(lispy-quit): inhibit reconnect when leaving the regular way
+
 2004-07-30  Yann Hodique  <Yann.Hodique@lifl.fr>
 
-	* lispy.el 
+	* lispy.el
 	(lispy-sentinel): add the possibility to inhibit it
 	(lispy-reconnect): new function
 	(lispy): make lispy-not-yet-connected local hook
 
-	* lispy-vars.el 
+	* lispy-vars.el
 	(lispy-buffer-local-variables): new variable
 	(lispy-buffer-local-hierarchy): new variable
 	(lispy-defvar): new macro
@@ -14,11 +28,11 @@
 	(lispy-update-buffer-hierarchy): new function
 	use lispy-defvar when needed
 
-	* lispy-utils.el 
+	* lispy-utils.el
 	(lispy-quit): inhibit sentinel
 	(lispy-add-hook-once): new function
 
-	* lispy-session.el 
+	* lispy-session.el
 	(lispy-vars): missing require
 	(lispy-session-alist): remove local-specific entries
 	(lispy-session-current-session): new variable
@@ -26,13 +40,13 @@
 	(lispy-read-password): fix advice name
 	(lispy-session): new function
 
-	* lispy-send.el 
+	* lispy-send.el
 	(lispy-init-send-buffer): inherit local variables from base buffer
 
-	* lispy-occur.el 
+	* lispy-occur.el
 	(lispy-occur): inherit local variables from base buffer
 
-	* lispy-history.el 
+	* lispy-history.el
 	(lispy-vars): missing require
 
 2004-06-30  Yann Hodique  <Yann.Hodique@lifl.fr>

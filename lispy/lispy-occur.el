@@ -92,7 +92,8 @@
 (define-key lispy-occur-mode-map "\C-m" 'lispy-reach-sending-buffer)
 (define-key lispy-occur-mode-map "\C-xk" (lambda ()
                                            (interactive)
-                                           (setq lispy-occur-buffers (delete (assoc (buffer-name) lispy-occur-buffers) lispy-occur-buffers))
+                                           (setq lispy-occur-buffers
+                                                 (delete (assoc (buffer-name) lispy-occur-buffers) lispy-occur-buffers))
                                            (kill-this-buffer)))
 (substitute-key-definition 'self-insert-command (lambda () (interactive)
                                                   (lispy-reach-sending-buffer)
@@ -111,14 +112,16 @@
   (interactive "P")
   (let* ((login (if (null arg)
                     (completing-read "Login: " lispy-user-list)
-                  ;;                   (read-from-minibuffer "Login: ")
-                 (word-at-point)))
+                  (word-at-point)))
          (reg (format "^<Mtp> \\(You tell %s:\\|%s tells you:\\)" login login))
          (buf (format "*<Mtp> Tell %s*" login))
          (pref (format "tell %s " login)))
-    (lispy-occur reg buf pref `(lambda (s)
-                                (let ((st (replace-regexp-in-string (format "^<Mtp> You tell %s:" ,login) (format "<%s>" lispy-remote-user) s)))
-                                  (replace-regexp-in-string (format "^<Mtp> %s tells you:" ,login) (format "<%s>" ,login) st))))))
+    (lispy-occur reg buf pref
+                 `(lambda (s)
+                    (let ((st (replace-regexp-in-string
+                               (format "^<Mtp> You tell %s:" ,login)
+                               (format "<%s>" lispy-remote-user) s)))
+                      (replace-regexp-in-string (format "^<Mtp> %s tells you:" ,login) (format "<%s>" ,login) st))))))
 
 (define-key lispy-mode-map "\C-c/t" 'lispy-occur-tell)
 

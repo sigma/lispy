@@ -100,6 +100,7 @@
 (lispy-defvar lispy-connected nil "")
 
 (lispy-defvar lispy-inhibit-sentinel nil "")
+(lispy-defvar lispy-inhibit-reconnect nil "")
 
 (defvar lispy-mode-map '())
 (defvar lispy-send-mode-map '())

@@ -78,24 +78,37 @@
                       (run-hook-with-args 'lispy-post-insert-hook st)))
                   strlist)))
       (when move (goto-char (process-mark proc))))
-    (if lispy-echo-off
+    ;; TODO: fixme
+    (if
+        ;(and
+         lispy-echo-off
+         ;(string-match "<Mtp> Password:" string))
         (let ((msg (lispy-read-password)))
+;;          (message "Password sent with entry = %s" string)
           (process-send-string lispy-process (concat msg "\r\n"))))))
 
 (defun lispy-sentinel (process event)
   "Function to call when the processus PROCESS receives EVENT. Used to signal disconnection."
   (if lispy-inhibit-sentinel
-      (setq lispy-inhibit-sentinel t)
-    (message
-     (format "Process: %s had the event `%s'" process event)
-     (run-hooks 'lispy-disconnected-hook))))
+        (setq lispy-inhibit-sentinel nil)
+    (progn
+      (message (format "Process: %s had the event `%s'" process event))
+      (run-hooks 'lispy-disconnected-hook))))
 
 (defun lispy-reconnect ()
   (interactive)
-  (lispy-quit)
-  (run-hooks 'lispy-disconnected-hook)
-  (lispy-session lispy-session-current-session)
-  (lispy-update-buffer-hierarchy (current-buffer) 'lispy-process))
+  (unless lispy-inhibit-reconnect
+    (progn
+;;       (condition-case nil
+;;           (progn
+;;             (lispy-quit)
+;;             (sit-for 1))
+;;         (error nil))
+      (let ((lispy-inhibit-reconnect t))
+        (run-hooks 'lispy-disconnected-hook))
+      (lispy lispy-host lispy-port lispy-buffer)
+      (lispy-update-buffer-hierarchy (current-buffer) 'lispy-process)
+      (goto-char (point-max)))))
 
 ;;;###autoload
 (defun lispy (host port &optional buffer)
@@ -137,7 +150,11 @@
 (define-key lispy-mode-map "\C-m" 'lispy-reach-sending-buffer)
 (substitute-key-definition 'self-insert-command (lambda () (interactive)
                                                   (lispy-reach-sending-buffer)
-                                                  (insert (this-command-keys))) lispy-mode-map global-map)
+                                                  (let ((keys (this-command-keys)))
+                                                    (if (stringp keys)
+                                                        (insert keys)
+                                                      (insert (mapconcat 'string keys "")))
+                                                    )) lispy-mode-map global-map)
 
 (define-key lispy-mode-map "\C-xk" (lambda () (interactive)
                                      (if (and (not (null lispy-process))
@@ -157,8 +174,10 @@
 (add-hook 'lispy-disconnected-hook (lambda ()
                                      (setq lispy-connected nil
                                            lispy-require-end-of-line nil
-                                           lispy-echo-off nil)
-                                     (lispy-reconnect)))
+                                           lispy-echo-off nil)))
+
+(add-hook 'lispy-disconnected-hook 'lispy-reconnect)
+
 (add-hook 'lispy-exit-hook (lambda ()
                              (kill-buffer lispy-buffer)))
 

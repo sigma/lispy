@@ -51,10 +51,12 @@
 
 (defun lispy-turn-on-echo ()
   "Turn echo on."
+;;  (message "echo turned on")
   (setq lispy-echo-off nil))
 
 (defun lispy-turn-off-echo ()
   "Turn echo off."
+;;  (message "echo turned off")
   (setq lispy-echo-off t))
 
 (defun lispy-clear-text-area ()
@@ -70,8 +72,16 @@
   (and s
        (progn
          (run-hook-with-args 'lispy-pre-send-hook s)
-         (process-send-string lispy-process (concat s "\r\n"))
-         (run-hook-with-args 'lispy-post-send-hook s)
+         (condition-case nil
+             (progn
+               (process-send-string lispy-process (concat (replace-regexp-in-string
+                                                           (string 255)
+                                                           (string 255 255) s)
+                                                          "\r\n"))
+               (run-hook-with-args 'lispy-post-send-hook s))
+           (error (progn
+;;                    (message "plop")
+                    (lispy-sentinel lispy-process "disconnected"))))
          )))
 
 (defun lispy-send-entry (prefix &optional default)
@@ -110,6 +120,8 @@
   "Close connection softly by sending appropriate message to server."
   (interactive)
   (setq lispy-inhibit-sentinel t)
+  (setq lispy-inhibit-reconnect t)
+  (lispy-update-buffer-hierarchy (current-buffer) 'lispy-inhibit-reconnect 'lispy-inhibit-sentinel)
   (lispy-message "quit"))
 
 (defconst lispy-emacs-version
